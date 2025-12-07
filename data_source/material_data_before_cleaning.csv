@@ -1,0 +1,74 @@
+ID,Material_Type,Strength,Weight_Capacity,Biodegradability_Score,CO2_Emission,Recyclability,Compostable,Water_Resistance
+1,PLA,Medium,1.5,8,2.8,60,Yes,Medium
+2,PBAT,Medium-Low,1.2,9,4.0,50,Yes,Low
+3,Recycled Paperboard,Medium,2,9,1.5,92,Yes,Low
+4,Mycelium Packaging,Medium,1,10,0.5,80,Yes,Medium
+5,Starch-Based Bioplastic,Low-Medium,1,8,2.5,40,Yes,Low
+6,Bagasse Fiber,Medium,2,9,1.0,85,Yes,Medium
+7,Cornstarch Foam,Low,1,7,2.0,50,Yes,Low
+8,Molded Cellulose Pulp,Medium,2,9,1.2,90,Yes,Medium
+9,Hemp Fiber Composite,High,3,9,1.5,85,Yes,High
+10,PLA-PBAT Blend,Medium,1.8,8,3.0,60,Yes,Medium
+11,Recycled Cardboard,Medium,2.5,9,1.0,95,Yes,Low
+12,Banana Leaf Packaging,Low,0.8,10,0.3,40,Yes,Low
+13,Coconut Husk Fiber,Medium,1.5,9,1.1,70,Yes,Medium
+14,Areca Palm Leaf Plates,Medium,1.2,10,0.4,60,Yes,Medium
+15,Bamboo Fiber Packaging,High,3,9,0.9,85,Yes,High
+16,Palm Fiber Biocomposite,Medium,1.5,8,1.2,70,Yes,Medium
+17,Cotton Cloth Bags,Medium,5,9,2.0,90,Yes,High
+18,Jute Bags,High,8,9,1.8,88,Yes,High
+19,Paper Honeycomb Board,Medium-High,5,8,1.0,90,Yes,Low
+20,Thermoformed Paper Packaging,Medium,2,9,1.3,92,Yes,Medium
+21,Wood Pulp Film,Medium,1,8,1.5,80,Yes,Medium
+22,Cassava Bioplastic,Low-Medium,1,9,1.0,60,Yes,Low
+23,Pineapple Leaf Fiber,Medium,1.5,9,0.8,82,Yes,Medium
+24,Rice Husk Biocomposite,Medium,2,8,1.2,70,Yes,Medium
+25,Recycled Kraft Paper,Medium,2,9,1.0,95,Yes,Low
+26,Wheat Straw Fiber,Medium,1.8,8,0.9,80,Yes,Medium
+27,Seaweed-Based Bioplastic,Low,0.7,10,0.5,50,Yes,Low
+28,Sorghum Fiber Packaging,Medium,1.5,8,1.4,75,Yes,Medium
+29,Coffee Husk Composite,Medium,1.3,8,1.3,70,Yes,Medium
+30,Cork Packaging,High,3,9,0.7,85,Yes,High
+31,Biodegradable Polyhydroxyalkanoate,Medium,1.5,10,1.5,70,Yes,Medium
+32,Mango Leaf Fiber Sheet,Low-Medium,1,8,0.6,50,Yes,Low
+33,Teak Leaf Packaging,Medium,1.2,9,0.8,55,Yes,Low
+34,Mulberry Paper,Low-Medium,1,9,0.9,90,Yes,Low
+35,Fallen Leaf Pressed Packaging,Low-Medium,1,10,0.4,60,Yes,Low
+36,Coconut Coir Board,High,2.5,9,1.1,85,Yes,Medium
+37,Corn Husk Fiber Sheet,Low-Medium,0.8,9,0.6,55,Yes,Low
+38,Algae-Based Foam,Low,0.5,10,0.4,40,Yes,Low
+39,Natural Rubber,Medium,3,7,2.0,50,Yes,High
+40,Paper Cotton Composite,Medium,1.8,9,1.0,85,Yes,Low
+41,Recycled Fabric Pouches,Medium,4,8,1.8,92,Yes,High
+42,Hybrid Bio-Resin Packaging,Medium,2,7,2.2,65,No,Medium
+43,PLA Foam Tray,Low-Medium,1,8,2.0,60,Yes,Low
+44,Recycled Cardboard Tube,Medium,2.5,9,1.1,92,Yes,Low
+45,Bamboo Paper Pouch,Medium,1.5,9,0.9,85,Yes,Medium
+46,Sugarcane Bag,Medium,2,9,1.0,80,Yes,Medium
+47,Molded Mushroom Tray,Medium,1,10,0.5,75,Yes,Medium
+48,Corn Starch Clamshell,Low,0.8,8,1.5,50,Yes,Low
+49,PLA Coated Paperboard,Medium,2,8,2.0,65,Yes,Medium
+50,Hemp Pulp Packaging,High,2.5,9,1.2,85,Yes,High
+51,Paper Kraft Bag,Medium,2,9,1.0,90,Yes,Low
+52,Bagasse Container,Medium,1.5,9,1.1,80,Yes,Medium
+53,Rice Paper Wrapper,Low-Medium,0.5,10,0.3,55,Yes,Low
+54,PLA Sheet Wrap,Medium,1.5,8,2.5,60,Yes,Medium
+55,Starch-Based Wrap,Low-Medium,0.8,8,2.0,50,Yes,Low
+56,Mushroom Mycelium Mold,Medium,1,10,0.4,70,Yes,Medium
+57,Palm Leaf Plates,Medium,1.2,10,0.3,65,Yes,Medium
+58,Recycled Paper Pouch,Medium,1.5,9,1.0,90,Yes,Low
+59,Coconut Fiber Bag,Medium,2,9,0.9,85,Yes,Medium
+60,Algae Bioplastic Film,Low,0.5,10,0.5,50,Yes,Low
+61,Bamboo Tray,High,2.5,9,0.8,85,Yes,High
+62,Recycled Cardboard Box,Medium,3,9,1.2,95,Yes,Low
+63,PLA Cup,Medium,1,8,2.0,60,Yes,Medium
+64,Bagasse Clamshell,Medium,1.5,9,1.0,80,Yes,Medium
+65,Palm Fiber Box,Medium,1.8,8,1.2,75,Yes,Medium
+66,Corn Husk Tray,Low-Medium,1,9,0.7,55,Yes,Low
+67,Mushroom Fiber Tray,Medium,1,10,0.4,70,Yes,Medium
+68,Recycled Kraft Container,Medium,2,9,1.0,90,Yes,Low
+69,PLA Bioplastic Pouch,Medium,1,8,2.2,60,Yes,Medium
+70,Sugarcane Fiber Box,Medium,2,9,1.1,80,Yes,Medium
+71,Hemp Fiber Pouch,High,2.5,9,1.3,85,Yes,High
+72,Recycled Paper Sleeve,Medium,1.5,9,1.0,90,Yes,Low
+73,Algae-Based Bottle,Low,0.5,10,0.5,50,Yes,Low

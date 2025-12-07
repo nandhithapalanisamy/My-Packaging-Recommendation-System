@@ -1,0 +1,136 @@
+productid,productcategory,productname,productweight,width,height
+1,cosmetics,lipstick,0.05,1.0,7.0
+2,cosmetics,moisturizer,0.1,5.0,10.0
+3,cosmetics,face wash tube,0.15,4.0,15.0
+4,cosmetics,perfume,0.2,3.0,12.0
+5,cosmetics,nail polish,0.08,2.0,8.0
+6,food,bread loaf,0.5,12.0,8.0
+7,food,snack pack,0.2,10.0,5.0
+8,food,soft drink can,0.33,6.5,12.0
+9,food,frozen meal,0.45,20.0,5.0
+10,food,dairy yogurt cup,0.15,8.0,6.0
+11,electronics,headphones,0.25,15.0,20.0
+12,electronics,smartwatch,0.1,4.0,4.0
+13,electronics,smartphone accessory charger,0.2,6.0,12.0
+14,electronics,camera lens,0.35,6.0,8.0
+15,electronics,usb flash drive,0.02,2.0,1.0
+16,apparel,cap,0.2,20.0,5.0
+17,apparel,socks pack,0.1,10.0,3.0
+18,apparel,gloves,0.15,12.0,4.0
+19,apparel,belt,0.25,15.0,3.0
+20,household,dish soap bottle,0.25,5.0,18.0
+21,household,air freshener spray,0.3,5.0,15.0
+22,household,floor cleaner,0.35,6.0,18.0
+23,household,toilet cleaner bottle,0.3,5.0,15.0
+24,household,sponges pack,0.15,12.0,3.0
+25,cosmetics,foundation bottle,0.12,3.0,10.0
+26,food,chocolate bar,0.1,6.0,2.0
+27,electronics,bluetooth earbuds,0.05,4.0,4.0
+28,apparel,underwear pack,0.2,15.0,3.0
+29,household,cleaning cloth,0.05,20.0,1.0
+30,cosmetics,eyeshadow palette,0.2,10.0,2.0
+31,cosmetics,lip balm,0.03,1.0,5.0
+32,cosmetics,face serum,0.08,3.0,12.0
+33,cosmetics,hand cream tube,0.1,4.0,10.0
+34,cosmetics,nail file kit,0.05,5.0,1.0
+35,food,pasta pack,0.5,18.0,25.0
+36,food,juice box,0.2,6.0,12.0
+37,food,granola bar,0.08,5.0,2.0
+38,food,cheese slice pack,0.3,10.0,5.0
+39,electronics,portable speaker,0.5,10.0,10.0
+40,electronics,memory card,0.02,2.0,1.0
+41,electronics,wireless mouse,0.12,6.0,4.0
+42,electronics,smartphone case,0.05,7.0,14.0
+43,apparel,scarf,0.2,20.0,2.0
+44,household,window cleaner spray,0.3,5.0,15.0
+45,household,dishwasher tablet pack,0.2,12.0,3.0
+46,household,garbage bags roll,0.5,20.0,15.0
+47,cosmetics,makeup remover wipes,0.1,10.0,2.0
+48,cosmetics,compact powder,0.12,6.0,2.0
+49,cosmetics,nail polish remover,0.15,5.0,10.0
+50,cosmetics,hair serum,0.08,3.0,12.0
+51,cosmetics,face mask,0.03,12.0,0.5
+52,food,milk carton,0.5,7.0,25.0
+53,food,butter pack,0.25,10.0,5.0
+54,food,yogurt drink,0.2,5.0,15.0
+55,food,fruit snack pack,0.1,6.0,5.0
+56,food,ice cream cup,0.15,7.0,10.0
+57,electronics,tablet,0.35,15.0,22.0
+58,electronics,smartphone,0.2,7.0,15.0
+59,electronics,earphone case,0.05,4.0,4.0
+60,electronics,charging cable,0.03,2.0,1.0
+61,electronics,power bank,0.4,8.0,15.0
+62,apparel,socks single pair,0.05,10.0,2.0
+63,apparel,hat,0.2,20.0,4.0
+64,apparel,sports gloves,0.15,12.0,3.0
+65,household,air filter small,0.25,10.0,5.0
+66,household,soap bar,0.1,7.0,3.0
+67,household,toothpaste tube,0.12,3.0,15.0
+68,household,shampoo mini bottle,0.2,4.0,15.0
+69,cosmetics,eye liner,0.03,1.0,10.0
+70,cosmetics,lip gloss,0.05,2.0,12.0
+71,cosmetics,nail polish kit,0.15,6.0,8.0
+72,cosmetics,hair oil,0.1,3.0,12.0
+73,cosmetics,face cream,0.15,5.0,12.0
+74,food,chocolate box,0.3,12.0,8.0
+75,food,granola pack,0.2,10.0,5.0
+76,food,tea bag box,0.15,8.0,10.0
+77,food,coffee sachet,0.05,4.0,3.0
+78,food,snack bar pack,0.12,6.0,3.0
+79,electronics,camera compact,0.45,12.0,8.0
+80,electronics,memory stick,0.02,2.0,1.0
+81,electronics,webcam small,0.25,8.0,6.0
+82,electronics,wireless charger,0.3,10.0,4.0
+83,electronics,headset mini,0.35,10.0,8.0
+84,apparel,tennis shorts,0.25,20.0,3.0
+85,apparel,scarf wool,0.15,15.0,2.0
+86,apparel,winter gloves,0.2,12.0,3.0
+87,household,dish cloth,0.05,20.0,1.0
+88,household,sponge pack,0.1,12.0,3.0
+89,household,glass cleaner bottle,0.3,5.0,15.0
+90,household,floor cleaner bottle,0.35,6.0,18.0
+91,household,laundry soap pack,0.4,12.0,5.0
+92,cosmetics,face toner,0.15,5.0,10.0
+93,cosmetics,serum bottle,0.12,4.0,10.0
+94,cosmetics,compact kit,0.2,8.0,3.0
+95,cosmetics,lipstick set,0.18,6.0,3.0
+96,cosmetics,nail care set,0.2,7.0,3.0
+97,food,milk bottle,0.5,7.0,25.0
+98,food,cheese block,0.35,10.0,5.0
+99,food,yogurt pack,0.25,8.0,6.0
+100,food,snack pack small,0.1,6.0,5.0
+101,food,soft drink mini bottle,0.33,6.0,12.0
+102,electronics,mini speaker,0.25,10.0,12.0
+103,electronics,smartband,0.08,4.0,4.0
+104,electronics,power adapter,0.2,6.0,10.0
+105,electronics,usb hub,0.12,5.0,4.0
+106,electronics,memory card case,0.03,2.0,1.0
+107,apparel,cap small,0.15,20.0,4.0
+108,apparel,shorts pack,0.35,20.0,3.0
+109,apparel,socks multi-pack,0.1,10.0,3.0
+110,apparel,underwear pack,0.2,15.0,3.0
+111,household,air freshener mini,0.1,5.0,12.0
+112,household,dish soap mini,0.25,5.0,18.0
+113,household,shampoo mini pack,0.3,4.0,15.0
+114,household,toilet cleaner small,0.25,5.0,15.0
+115,household,cleaning cloth mini,0.05,15.0,1.0
+116,cosmetics,blush compact,0.1,5.0,2.0
+117,cosmetics,highlighter,0.08,4.0,2.0
+118,cosmetics,eyeshadow mini,0.05,3.0,1.0
+119,cosmetics,lipstick mini,0.03,1.0,7.0
+120,cosmetics,nail polish mini,0.04,2.0,5.0
+121,food,snack bag,0.1,6.0,5.0
+122,food,granola mini pack,0.08,5.0,2.0
+123,food,cereal mini box,0.35,10.0,15.0
+124,food,juice mini box,0.2,5.0,10.0
+125,food,chocolate mini bar,0.05,5.0,2.0
+126,electronics,mini camera,0.3,8.0,5.0
+127,electronics,usb cable mini,0.02,2.0,1.0
+128,electronics,portable charger small,0.15,6.0,10.0
+129,electronics,wireless earbuds case,0.05,4.0,4.0
+130,electronics,memory stick small,0.02,2.0,1.0
+131,apparel,beanie cap,0.1,15.0,5.0
+132,apparel,scarf mini,0.05,12.0,2.0
+133,apparel,socks pair mini,0.05,8.0,2.0
+134,apparel,gloves mini,0.05,10.0,3.0
+135,household,sponges mini pack,0.05,10.0,2.0

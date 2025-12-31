@@ -51,7 +51,7 @@ test_df["co2_impact_index"] = y_co2_test
 test_df.to_csv("C:\\InfosysInternshipRepos\\Packaging-Recommendation-System\\Dataset_Preparation\\data_outputs\\test_data.csv", index=False)
 
 # ----------------------------
-# 5. LINEAR REGRESSION MODELS (BASELINE)
+# LINEAR REGRESSION MODELS (BASELINE)
 # ----------------------------
 with mlflow.start_run(run_name="Linear_Cost_Prediction"):
     cost_lr = Pipeline([("model", LinearRegression())])
@@ -126,16 +126,36 @@ with mlflow.start_run(run_name="XGBoost_CO2_Model"):
 # ----------------------------
 # RANKING FILE (BASED ON PREDICTIONS)
 # ----------------------------
+# Create ranking dataframe
 ranking_df = X_test.copy()
+
+# Add predictions
 ranking_df["Predicted_Cost"] = rf_pred
 ranking_df["Predicted_CO2"] = xgb_pred
 
-ranking_df["Final_Score"] = (
-    ranking_df["Predicted_Cost"].rank(ascending=False) +
-    ranking_df["Predicted_CO2"].rank(ascending=True)
+# Add Material ID (index-based or real ID column)
+ranking_df["Material"] = ranking_df.index
+
+# Combined score (lower is better)
+ranking_df["Combined_Score"] = (
+    ranking_df["Predicted_Cost"] + ranking_df["Predicted_CO2"]
 )
 
-ranking_df = ranking_df.sort_values("Final_Score")
-ranking_df.to_csv("C:\\InfosysInternshipRepos\\Packaging-Recommendation-System\\Dataset_Preparation\\data_outputs\\ranking.csv", index=False)
+# Ranking (1 = best)
+ranking_df["Rank"] = ranking_df["Combined_Score"].rank(method="dense")
+
+# Select required columns
+final_ranking = ranking_df[
+    ["Material", "Predicted_Cost", "Predicted_CO2", "Combined_Score", "Rank"]
+].sort_values("Rank")
+
+# Save to CSV
+final_ranking.to_csv(
+    "C:\\InfosysInternshipRepos\\Packaging-Recommendation-System\\Dataset_Preparation\\data_outputs\\ranking.csv",
+    index=False
+)
+
+print("\n--- Material Ranking Based on ML Predictions ---")
+print(final_ranking)
 
 print("All outputs generated successfully!")

@@ -124,6 +124,25 @@ with mlflow.start_run(run_name="XGBoost_CO2_Model"):
     joblib.dump(xgb_model, "C:\\InfosysInternshipRepos\\Packaging-Recommendation-System\\Dataset_Preparation\\saved_models\\xgboost_co2.pkl")
 
 # ----------------------------
+# EVALUATION FUNCTION
+# ----------------------------
+def evaluate_model(y_true, y_pred, model_name):
+    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+    mae = mean_absolute_error(y_true, y_pred)
+    r2 = r2_score(y_true, y_pred)
+
+    print(f"--- {model_name} Evaluation ---")
+    print(f"RMSE: {rmse:.4f}")
+    print(f"MAE: {mae:.4f}")
+    print(f"R² Score: {r2:.4f}")
+    print()
+
+    return rmse, mae, r2
+rf_metrics = evaluate_model(y_cost_test, rf_pred, "Random Forest (Cost)")
+xgb_metrics = evaluate_model(y_co2_test, xgb_pred, "XGBoost (CO2)")
+
+
+# ----------------------------
 # RANKING FILE (BASED ON PREDICTIONS)
 # ----------------------------
 # Create ranking dataframe

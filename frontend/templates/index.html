@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Packaging Recommendation System</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">AI Packaging Recommendation System</h2>
+
+    <!-- Product Form -->
+    <div class="card p-4 mb-4 shadow-sm">
+        <form id="productForm">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="mb-3">Product Category</label>
+                    <input type="text" id="category" class="form-control" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="mb-3">Weight (kg)</label>
+                    <input type="number" id="weight" class="form-control" min="0" step="0.1" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="mb-3">Fragility (1–5)</label>
+                    <input type="number" id="fragility" class="form-control" min="1" max="5" required>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-4">
+                    Get Recommendations
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Recommendation Table -->
+    <div class="card p-4 shadow-sm mb-4 d-none" id="recommendationSection">
+        <h4>Material Recommendations</h4>
+        <table class="table table-bordered mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Rank</th>
+                    <th>Material</th>
+                    <th>Predicted Cost (₹)</th>
+                    <th>CO₂ Impact (%)</th>
+                </tr>
+            </thead>
+            <tbody id="resultTable">
+                <tr>
+                    <td colspan="4" class="text-center">No recommendations</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Environmental Score -->
+    <div class="card p-4 shadow-sm d-none" id="environmentSection">
+        <h4>Environmental Impact Score</h4>
+        <p><strong>Biodegradability:</strong> <span id="bioScore">-</span> %</p>
+        <p><strong>Recyclability:</strong> <span id="recycleScore">-</span> %</p>
+        <p><strong>CO₂ Impact Index:</strong> <span id="co2Index">-</span> %</p>
+        <p><strong>Material Suitability Score:</strong> <span id="suitabilityScore">-</span> %</p>
+    </div>
+</div>
+
+<script>
+document.getElementById("productForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const productData = {
+        category: document.getElementById("category").value,
+        weight: parseFloat(document.getElementById("weight").value),
+        fragility: parseInt(document.getElementById("fragility").value)
+    };
+
+    // -------------------------------
+    // Recommendation API
+    // -------------------------------
+    fetch("/recommend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productData)
+    })
+    .then(res => res.json())
+    .then(recommendations => {
+
+        const table = document.getElementById("resultTable");
+        table.innerHTML = "";
+
+        if (recommendations.length === 0) {
+            table.innerHTML =
+                `<tr><td colspan="4" class="text-center">No recommendations</td></tr>`;
+        } else {
+            recommendations.forEach((item, index) => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.material}</td>
+                        <td>₹ ${item.predicted_cost}</td>
+                        <td>${item.co2_impact} %</td>
+                    </tr>
+                `;
+            });
+        }
+
+        document.getElementById("recommendationSection")
+            .classList.remove("d-none");
+
+        // -------------------------------
+        // Environmental Score API
+        // -------------------------------
+        return fetch("/environment-score", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                weight: productData.weight,
+                fragility: productData.fragility
+            })
+        });
+    })
+    .then(res => res.json())
+    .then(score => {
+
+        document.getElementById("bioScore").innerText =
+            score.biodegradability_percent.toFixed(2);
+
+        document.getElementById("recycleScore").innerText =
+            score.recyclability_percent.toFixed(2);
+
+        document.getElementById("co2Index").innerText =
+            score.co2_impact_index_percent.toFixed(2);
+
+        document.getElementById("suitabilityScore").innerText =
+            score.material_suitability_score_percent.toFixed(2);
+
+        document.getElementById("environmentSection")
+            .classList.remove("d-none");
+    })
+    .catch(err => {
+        console.error("ERROR:", err);
+        alert("Backend error. Check console.");
+    });
+});
+</script>
+
+</body>
+</html>

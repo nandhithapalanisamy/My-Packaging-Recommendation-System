@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Packaging BI Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #f5f7fa; }
+        .card { border-radius: 14px; }
+        .kpi-value { font-size: 2rem; font-weight: bold; }
+        .baseline-row { background-color: #fff3cd !important; font-weight: 600; }
+        .top-material { background-color: #d4edda !important; font-weight: bold; }
+    </style>
+</head>
+
+<body>
+<div class="container mt-5">
+
+<h2 class="mb-4">Sustainable Packaging – BI Dashboard</h2>
+
+<!-- INPUT CARD -->
+<div class="card p-4 mb-4">
+<div class="row align-items-end">
+
+<div class="col-md-4">
+<label class="form-label">Select Baseline Material</label>
+<select id="baseline" class="form-select">
+<option>Fallen Leaf Pressed Packaging</option>
+<option>Mushroom Fiber Tray</option>
+<option>Cornstarch Foam</option>
+<option>PLA Foam Tray</option>
+<option>PLA Coated Paperboard</option>
+</select>
+</div>
+
+<div class="col-md-2">
+<label class="form-label">Weight (kg)</label>
+<input type="number" id="weightInput" class="form-control" value="0" step="0.1" min="0">
+</div>
+
+<div class="col-md-2">
+<label class="form-label">Fragility (1–5)</label>
+<input type="number" id="fragilityInput" class="form-control" value="0" min="1" max="5">
+</div>
+
+<div class="col-md-4">
+<button class="btn btn-primary w-100" onclick="analyze()">Analyze</button>
+</div>
+
+</div>
+</div>
+
+<!-- KPI -->
+<div class="row mb-4">
+<div class="col-md-6">
+<div class="card p-3 text-center">
+<h6>Average Cost Reduction</h6>
+<div id="avgCost" class="kpi-value text-success">0%</div>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="card p-3 text-center">
+<h6>Average CO₂ Reduction</h6>
+<div id="avgCo2" class="kpi-value text-success">0%</div>
+</div>
+</div>
+</div>
+
+<!-- MATERIAL COMPARISON TABLE -->
+<div class="card p-3">
+<h5>Material Comparison</h5>
+<table class="table table-bordered mt-3">
+<thead class="table-light">
+<tr>
+<th>Material</th>
+<th>Predicted Cost (₹)</th>
+<th>Predicted CO₂ (%)</th>
+<th>Cost Reduction (%)</th>
+<th>CO₂ Reduction (%)</th>
+</tr>
+</thead>
+<tbody id="resultTable"></tbody>
+</table>
+</div>
+<div class="text-end mt-2">
+    <button class="btn btn-outline-primary"
+            onclick="downloadMaterialComparisonExcel()">
+        Download Material Comparison (Excel)
+    </button>
+</div>
+
+
+<!-- MATERIAL USAGE -->
+<div class="card p-4 mt-4">
+<h5 class="mb-3">Material Usage Trend (Suitability Coverage)</h5>
+
+<select id="recommendedMaterialDropdown" class="form-select mb-3">
+<option value="">-- Select Material --</option>
+</select>
+
+<div class="row">
+<div class="col-md-6">
+<canvas id="materialUsageChart"></canvas>
+</div>
+
+<div class="col-md-6">
+<div class="card p-3 mb-3 text-center bg-light">
+<h6 class="text-success">Suitable Products</h6>
+<div id="suitablePercent" class="kpi-value text-success">0.00%</div>
+</div>
+
+<div class="card p-3 text-center bg-light">
+<h6 class="text-danger">Not Suitable Products</h6>
+<div id="notSuitablePercent" class="kpi-value text-danger">0.00%</div>
+</div>
+</div>
+</div>
+</div>
+
+<button class="btn btn-outline-success mt-3" onclick="loadMaterialPerformanceTrend()">View Material Trends</button>
+
+<div class="card p-3 mt-4">
+<h5>Top 5 Best Material Performance Trend</h5>
+<table class="table table-bordered mt-3">
+<thead class="table-light">
+<tr>
+<th>Material</th>
+<th>CO₂ (%)</th>
+<th>Cost (%)</th>
+<th>Performance (%)</th>
+</tr>
+</thead>
+<tbody id="materialPerformanceTable"></tbody>
+</table>
+</div>
+<div class="text-end mt-2">
+    <button class="btn btn-outline-success"
+            onclick="downloadMaterialPerformanceExcel()">
+        Download Performance Report (Excel)
+    </button>
+</div>
+<!-- TOP 10 SUSTAINABILITY REPORT -->
+<div class="card p-3 mt-4">
+    <h5>Top 10 Sustainability Materials</h5>
+    <table class="table table-bordered mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Material</th>
+                <th>Sustainability Score</th>
+                <th>CO₂ Impact (%)</th>
+                <th>Cost Efficiency (%)</th>
+            </tr>
+        </thead>
+        <tbody id="sustainabilityReportTable"></tbody>
+    </table>
+</div>
+
+<div class="text-end mt-2">
+    <button class="btn btn-outline-info" onclick="downloadSustainabilityReport()">
+        Download Sustainability Report (Excel)
+    </button>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+let usageChart = null;
+
+/* ANALYZE */
+async function analyze() {
+    const baseline = document.getElementById("baseline").value;
+    const weight = Number(document.getElementById("weightInput").value);
+    const fragility = Number(document.getElementById("fragilityInput").value);
+
+    const response = await fetch("/api/material-comparison", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selected_material: baseline, weight, fragility })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("avgCost").innerText =
+        Number(data.average_cost_reduction).toFixed(2) + "%";
+
+    document.getElementById("avgCo2").innerText =
+        Number(data.average_co2_reduction).toFixed(2) + "%";
+
+    const table = document.getElementById("resultTable");
+    table.innerHTML = "";
+
+    data.materials.forEach(item => {
+        table.innerHTML += `
+        <tr>
+            <td>${item.material}</td>
+            <td>₹ ${Number(item.predicted_cost).toFixed(2)}</td>
+            <td>${Number(item.predicted_co2).toFixed(2)}%</td>
+            <td>${Number(item.cost_reduction_percent).toFixed(2)}%</td>
+            <td>${Number(item.co2_reduction_percent).toFixed(2)}%</td>
+        </tr>`;
+    });
+
+    loadRecommendedMaterials();
+}
+
+/* LOAD RECOMMENDED MATERIALS */
+async function loadRecommendedMaterials() {
+    const weight = Number(document.getElementById("weightInput").value) || 1;
+    const fragility = Number(document.getElementById("fragilityInput").value) || 1;
+
+    const response = await fetch("/api/get-top-materials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ weight, fragility }) // ✅ FIX
+    });
+
+    const materials = await response.json();
+    const dropdown = document.getElementById("recommendedMaterialDropdown");
+
+    dropdown.innerHTML = `<option value="">-- Select Material --</option>`;
+
+    materials.forEach(m => {
+        dropdown.innerHTML += `
+            <option value="${m.material}">${m.material}</option>
+        `;
+    });
+}
+/* DOWNLOAD MATERIAL COMPARISON EXCEL */
+function downloadMaterialComparisonExcel() {
+
+    const rows = document.querySelectorAll("#resultTable tr");
+    if (!rows.length) {
+        alert("No comparison data available");
+        return;
+    }
+
+    const comparison = [];
+
+    rows.forEach(row => {
+        const cols = row.querySelectorAll("td");
+
+        comparison.push({
+            material: cols[0].innerText,
+            predicted_cost: parseFloat(cols[1].innerText.replace("₹","")),
+            predicted_co2: parseFloat(cols[2].innerText.replace("%","")),
+            cost_reduction: parseFloat(cols[3].innerText.replace("%","")),
+            co2_reduction: parseFloat(cols[4].innerText.replace("%",""))
+        });
+    });
+
+    fetch("/api/export/material-comparison/excel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comparison })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Material_Comparison_Report.xlsx";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    });
+}
+
+/* MATERIAL PERFORMANCE PIE (FIXED) */
+document.getElementById("recommendedMaterialDropdown")
+.addEventListener("change", async function () {
+
+    if (!this.value) return;
+
+    const response = await fetch("/api/material-performance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ material: this.value })
+    });
+
+    const result = await response.json();
+
+    const suitable = Number(result.performance.toFixed(2));
+    const notSuitable = Number((100 - suitable).toFixed(2));
+
+    document.getElementById("suitablePercent").innerText =
+        suitable.toFixed(2) + "%";
+
+    document.getElementById("notSuitablePercent").innerText =
+        notSuitable.toFixed(2) + "%";
+
+    if (usageChart) usageChart.destroy();
+
+    usageChart = new Chart(
+        document.getElementById("materialUsageChart"),
+        {
+            type: "pie",
+            data: {
+                labels: ["Suitable Products", "Not Suitable Products"],
+                datasets: [{
+                    data: [suitable, notSuitable],
+                    backgroundColor: ["#28a745", "#dc3545"]
+                }]
+            }
+        }
+    );
+});
+
+/* PERFORMANCE TREND */
+async function loadMaterialPerformanceTrend() {
+    const response = await fetch("/api/material-performance-trend");
+    const result = await response.json();
+
+    const table = document.getElementById("materialPerformanceTable");
+    table.innerHTML = "";
+
+    result.data.forEach(item => {
+        table.innerHTML += `
+        <tr>
+            <td>${item.material.replaceAll("_"," ")}</td>
+            <td>${Number(item.co2_percent).toFixed(2)}%</td>
+            <td>${Number(item.cost_percent).toFixed(2)}%</td>
+            <td>${Number(item.performance_percent).toFixed(2)}%</td>
+        </tr>`;
+    });
+}
+/* DOWNLOAD MATERIAL PERFORMANCE EXCEL */
+function downloadMaterialPerformanceExcel() {
+
+    const rows = document.querySelectorAll("#materialPerformanceTable tr");
+    if (!rows.length) {
+        alert("No performance data available");
+        return;
+    }
+
+    const performance = [];
+
+    rows.forEach(row => {
+        const cols = row.querySelectorAll("td");
+
+        performance.push({
+            material: cols[0].innerText,
+            co2_efficiency: parseFloat(cols[1].innerText.replace("%","")),
+            cost_efficiency: parseFloat(cols[2].innerText.replace("%","")),
+            performance: parseFloat(cols[3].innerText.replace("%",""))
+        });
+    });
+
+    fetch("/api/export/material-performance/excel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ performance })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Material_Performance_Report.xlsx";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    });
+}
+/* LOAD TOP 5 SUSTAINABILITY REPORT */
+async function loadSustainabilityReport() {
+    const response = await fetch("/api/sustainability-report");
+    const result = await response.json();
+
+    const table = document.getElementById("sustainabilityReportTable");
+    table.innerHTML = "";
+
+    result.data.forEach(item => {
+        table.innerHTML += `
+        <tr>
+            <td>${item.material}</td>
+            <td>${item.sustainability_score}</td>
+            <td>${item.co2_impact.toFixed(2)}%</td>
+            <td>${item.cost_efficiency.toFixed(2)}%</td>
+        </tr>`;
+    });
+}
+
+/* DOWNLOAD SUSTAINABILITY REPORT AS EXCEL */
+function downloadSustainabilityReport() {
+    const rows = document.querySelectorAll("#sustainabilityReportTable tr");
+    if (!rows.length) {
+        alert("No sustainability report data available");
+        return;
+    }
+
+    const report = [];
+
+    rows.forEach(row => {
+        const cols = row.querySelectorAll("td");
+
+        report.push({
+            material: cols[0].innerText,
+            sustainability_score: parseFloat(cols[1].innerText),
+            co2_impact: parseFloat(cols[2].innerText.replace("%","")),
+            cost_efficiency: parseFloat(cols[3].innerText.replace("%",""))
+        });
+    });
+
+    fetch("/api/export/sustainability-report/excel", { // create this backend route
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ report })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Sustainability_Report.xlsx";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    });
+}
+
+// Load report automatically on page load
+window.addEventListener("load", loadSustainabilityReport);
+
+</script>
+
+</body>
+</html>

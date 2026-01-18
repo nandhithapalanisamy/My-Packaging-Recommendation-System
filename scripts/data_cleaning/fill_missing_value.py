@@ -24,7 +24,7 @@ def missing_value(df):
     df_filled = pd.DataFrame(df_filled, columns=numeric_columns + categorical_columns)
     return df_filled
 
-# normaling the numeric values
+# normaling the numeric values using minmaxscaler
 def normalize_numeric(df):
     numeric_columns = ["id", "weight_capacity", "biodegradability_score", "co2_emission", "recyclability"]
     scaler = MinMaxScaler()

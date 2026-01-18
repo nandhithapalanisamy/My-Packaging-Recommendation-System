@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 # Read CSV
-df = pd.read_csv("C:/Users/nandh/Downloads/before_cleaning_product_data.csv")
+df = pd.read_csv(r"C:\InfosysInternshipRepos\Packaging-Recommendation-System\data_source\product_data_before_cleaning.csv")
 
 # Correct structural errors first (strip spaces, lowercase, replace spaces, remove special chars)
 df.columns = (
@@ -51,6 +51,6 @@ df[numeric_cols] = df[numeric_cols].round(2)
 df["productid"] = range(1, len(df) + 1)
 
 # Save cleaned data
-df.to_csv("C:/Users/nandh/Downloads/cleaned_product_data.csv", index=False)
+df.to_csv(r"C:\InfosysInternshipRepos\Packaging-Recommendation-System\data_source\cleaned_product_data.csv", index=False)
 print("DATA CLEANED")
 

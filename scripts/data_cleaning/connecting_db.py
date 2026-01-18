@@ -15,7 +15,7 @@ connection = psycopg2.connect(
     host="localhost",
     database="infosys_database",
     user="postgres",
-    password="Pass_word",
+    password="PostgreSQL#11",
     port="5432"
 )
 
@@ -37,7 +37,7 @@ Q1 = df[numeric_cols].quantile(0.25)
 Q3 = df[numeric_cols].quantile(0.75)
 IQR = Q3 - Q1
 
-# Remove outliers
+# Remove outliers using interquartile range
 df_clean = df[~((df[numeric_cols] < (Q1 - 1.5 * IQR)) | 
                 (df[numeric_cols] > (Q3 + 1.5 * IQR))).any(axis=1)]
 

@@ -4,29 +4,42 @@
     <meta charset="UTF-8">
     <title>AI Packaging Recommendation System</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Your existing CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">AI Packaging Recommendation System</h2>
+
+    <!-- HEADER WITH BI DASHBOARD BUTTON -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">AI Packaging Recommendation System</h2>
+
+        <button id="dashboardBtn" class="btn btn-outline-success">
+            BI Dashboard
+        </button>
+    </div>
 
     <!-- Product Form -->
     <div class="card p-4 mb-4 shadow-sm">
         <form id="productForm">
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label class="mb-3">Product Category</label>
+                    <label class="mb-2">Product Category</label>
                     <input type="text" id="category" class="form-control" required>
                 </div>
+
                 <div class="col-md-4 mb-3">
-                    <label class="mb-3">Weight (kg)</label>
+                    <label class="mb-2">Weight (kg)</label>
                     <input type="number" id="weight" class="form-control" min="0" step="0.1" required>
                 </div>
+
                 <div class="col-md-4 mb-3">
-                    <label class="mb-3">Fragility (1–5)</label>
+                    <label class="mb-2">Fragility (1–5)</label>
                     <input type="number" id="fragility" class="form-control" min="1" max="5" required>
                 </div>
             </div>
@@ -41,7 +54,8 @@
 
     <!-- Recommendation Table -->
     <div class="card p-4 shadow-sm mb-4 d-none" id="recommendationSection">
-        <h4>Material Recommendations</h4>
+     <h4>Material Recommendations</h4>
+
         <table class="table table-bordered mt-3">
             <thead class="table-dark">
                 <tr>
@@ -57,18 +71,27 @@
                 </tr>
             </tbody>
         </table>
+
+    <!-- Get Copy Button -->
+    <div class="text-center mt-3">
+        <button id="getCopyBtn" class="btn btn-success d-none">
+            Get Copy
+        </button>
     </div>
+</div>
+
 
     <!-- Environmental Score -->
     <div class="card p-4 shadow-sm d-none" id="environmentSection">
         <h4>Environmental Impact Score</h4>
         <p><strong>Biodegradability:</strong> <span id="bioScore">-</span> %</p>
         <p><strong>Recyclability:</strong> <span id="recycleScore">-</span> %</p>
-        <p><strong>CO₂ Impact Index:</strong> <span id="co2Index">-</span> %</p>
         <p><strong>Material Suitability Score:</strong> <span id="suitabilityScore">-</span> %</p>
     </div>
+
 </div>
 
+<!-- ================== MAIN SCRIPT ================== -->
 <script>
 document.getElementById("productForm").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -79,9 +102,7 @@ document.getElementById("productForm").addEventListener("submit", function (e) {
         fragility: parseInt(document.getElementById("fragility").value)
     };
 
-    // -------------------------------
     // Recommendation API
-    // -------------------------------
     fetch("/recommend", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -111,10 +132,13 @@ document.getElementById("productForm").addEventListener("submit", function (e) {
 
         document.getElementById("recommendationSection")
             .classList.remove("d-none");
+        if (recommendations.length >= 10) {
+            document.getElementById("getCopyBtn").classList.remove("d-none");
+        } else {
+            document.getElementById("getCopyBtn").classList.add("d-none");
+        }
 
-        // -------------------------------
         // Environmental Score API
-        // -------------------------------
         return fetch("/environment-score", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -133,9 +157,6 @@ document.getElementById("productForm").addEventListener("submit", function (e) {
         document.getElementById("recycleScore").innerText =
             score.recyclability_percent.toFixed(2);
 
-        document.getElementById("co2Index").innerText =
-            score.co2_impact_index_percent.toFixed(2);
-
         document.getElementById("suitabilityScore").innerText =
             score.material_suitability_score_percent.toFixed(2);
 
@@ -146,6 +167,67 @@ document.getElementById("productForm").addEventListener("submit", function (e) {
         console.error("ERROR:", err);
         alert("Backend error. Check console.");
     });
+});
+document.getElementById("getCopyBtn").addEventListener("click", async function () {
+    try {
+        // Collect recommendations from table
+        const recommendations = [];
+        document.querySelectorAll("#resultTable tr").forEach((row, index) => {
+            const cells = row.querySelectorAll("td");
+            if (cells.length === 4 && cells[1].innerText !== "No recommendations") {
+                recommendations.push({
+                    material: cells[1].innerText,
+                    predicted_cost: parseFloat(cells[2].innerText.replace("₹", "").trim()),
+                    co2_impact: parseFloat(cells[3].innerText.replace("%", "").trim()),
+                    score: index + 1 // optional
+                });
+            }
+        });
+
+        if (recommendations.length === 0) {
+            alert("No recommendations to download.");
+            return;
+        }
+
+        // Call export API
+        const response = await fetch("/api/export/recommendations/excel", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ recommendations })
+        });
+
+        // Check for JSON error
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to download file");
+        }
+
+        // Handle file download
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "AI_Recommended_Materials.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        alert("File successfully downloaded!");
+    } catch (err) {
+        console.error("Download ERROR:", err);
+        alert("Failed to download file. Check console.");
+    }
+});
+
+
+</script>
+
+<!-- ================== BI DASHBOARD BUTTON SCRIPT ================== -->
+<script>
+document.getElementById("dashboardBtn").addEventListener("click", function () {
+    window.location.href = "/dashboard";
 });
 </script>
 

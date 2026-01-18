@@ -1,9 +1,13 @@
 from sqlalchemy import create_engine
+import os
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 try:
-    engine = create_engine(
-    "postgresql+psycopg2://postgres:PostgreSQL#11@localhost:5432/infosys_database"
-)
+    if DATABASE_URL is None:
+        raise Exception("DATABASE_URL environment variable not set")
+
+    engine = create_engine(DATABASE_URL)
     print("Database connected successfully")
 except Exception as e:
     print("Database connection failed:", e)

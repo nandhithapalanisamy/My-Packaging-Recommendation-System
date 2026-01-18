@@ -33,6 +33,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 TEMPLATE_DIR = os.path.join(FRONTEND_DIR, "templates")
 STATIC_DIR = os.path.join(FRONTEND_DIR, "static")
+model_dir = os.path.join(BASE_DIR, "..", "Dataset_Preparation", "saved_models")
+
+cost_model_path = os.path.join(model_dir, "random_forest_cost.pkl")
+co2_model_path = os.path.join(model_dir, "xgboost_co2.pkl")
+
+
 
 LAST_USER_INPUT = { "weight": None, "fragility": None }
 
@@ -45,12 +51,8 @@ def home():
 # -------------------------------
 # Load ML Models
 # -------------------------------
-cost_model = joblib.load(
-    "C:\\InfosysInternshipRepos\\Packaging-Recommendation-System\\Dataset_Preparation\\saved_models\\random_forest_cost.pkl"
-)
-co2_model = joblib.load(
-    "C:\\InfosysInternshipRepos\\Packaging-Recommendation-System\\Dataset_Preparation\\saved_models\\xgboost_co2.pkl"
-)
+cost_model = joblib.load(cost_model_path)
+co2_model = joblib.load(co2_model_path)
 
 # -------------------------------
 # Recommendation API

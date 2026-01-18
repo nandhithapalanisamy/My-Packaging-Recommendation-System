@@ -1,52 +1,47 @@
-import pandas as pd
-from sqlalchemy import create_engine
 import os
+import pandas as pd
+from sqlalchemy import create_engine, text
 
-# -------------------------------
-# Base directory (important)
-# -------------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# -------------------------------
-# CSV path (your data_set.csv)
-# -------------------------------
+if not DATABASE_URL:
+    print("DATABASE_URL not set, skipping DB init")
+    exit(0)
+
+engine = create_engine(DATABASE_URL)
+
 CSV_PATH = os.path.join(
-    PROJECT_ROOT,
+    os.path.dirname(__file__),
+    "..",
     "Dataset_Preparation",
     "data_set.csv"
 )
 
-if not os.path.exists(CSV_PATH):
-    raise FileNotFoundError(f"CSV not found: {CSV_PATH}")
+def init_db():
+    with engine.connect() as conn:
+        # check if table exists
+        result = conn.execute(text("""
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_name = 'target_material_data'
+            );
+        """)).scalar()
 
-# -------------------------------
-#  Database connection
-# -------------------------------
-DATABASE_URL = os.environ.get("DATABASE_URL")
+        if result:
+            print("Table already exists. Skipping initialization.")
+            return
 
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL environment variable not set")
+    print("Creating table and inserting CSV data...")
+    df = pd.read_csv(CSV_PATH)
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    df.to_sql(
+        "target_material_data",
+        engine,
+        if_exists="replace",
+        index=False
+    )
 
-print(" Connected to Render PostgreSQL")
+    print("Database initialized successfully!")
 
-# -------------------------------
-# 4. Load CSV
-# -------------------------------
-df = pd.read_csv(CSV_PATH)
-
-print(f" Loaded CSV with {df.shape[0]} rows and {df.shape[1]} columns")
-
-# -------------------------------
-# 5. Create table: target_material_data
-# -------------------------------
-df.to_sql(
-    name="target_material_data",
-    con=engine,
-    if_exists="replace",   # drops old table if exists
-    index=False
-)
-
-print(" target_material_data table created and populated successfully")
+if __name__ == "__main__":
+    init_db()

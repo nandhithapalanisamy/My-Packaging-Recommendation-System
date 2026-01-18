@@ -10,6 +10,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from init_db import init_db
+
+init_db()  # runs once on startup
 
 # -------------------------------
 # Decode One-Hot Encoded Material

@@ -1,10 +1,12 @@
 flask
 gunicorn
-psycopg2-binary
 pandas
 numpy
 scikit-learn
-joblib
 xgboost
+joblib
 sqlalchemy
+psycopg2-binary
 matplotlib
+reportlab
+xlsxwriter
